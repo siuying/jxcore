@@ -172,7 +172,7 @@
           'EMBED_BITCODE': 'YES',
           'IPHONEOS_DEPLOYMENT_TARGET': '6.0',
           'GCC_GENERATE_DEBUGGING_SYMBOLS': 'NO',
-          
+
           'USE_HEADERMAP': 'NO',
           'OTHER_CFLAGS': [
             '-fno-strict-aliasing',
@@ -223,6 +223,65 @@
             'xcode_settings': { 'SDKROOT': 'iphonesimulator' },
           }, {
             'xcode_settings': { 'SDKROOT': 'iphoneos', 'ENABLE_BITCODE': 'YES'},
+          }]
+        ],
+      }],
+      ['OS=="tvos"', {
+        'xcode_settings': {
+          'ALWAYS_SEARCH_USER_PATHS': 'NO',
+          'GCC_CW_ASM_SYNTAX': 'NO',                # No -fasm-blocks
+          'GCC_DYNAMIC_NO_PIC': 'NO',               # No -mdynamic-no-pic
+                                                    # (Equivalent to -fPIC)
+          'GCC_ENABLE_CPP_EXCEPTIONS': 'NO',        # -fno-exceptions
+          'GCC_ENABLE_CPP_RTTI': 'NO',              # -fno-rtti
+          'GCC_ENABLE_PASCAL_STRINGS': 'NO',        # No -mpascal-strings
+          'GCC_THREADSAFE_STATICS': 'NO',           # -fno-threadsafe-statics
+          'PREBINDING': 'NO',                       # No -Wl,-prebind
+          'EMBED_BITCODE': 'YES',
+          'IPHONEOS_DEPLOYMENT_TARGET': '6.0',
+          'GCC_GENERATE_DEBUGGING_SYMBOLS': 'NO',
+
+          'USE_HEADERMAP': 'NO',
+          'OTHER_CFLAGS': [
+            '-fno-strict-aliasing',
+            '-fno-standalone-debug'
+          ],
+          'OTHER_CPLUSPLUSFLAGS': [
+            '-fno-strict-aliasing',
+            '-fno-standalone-debug'
+          ],
+          'OTHER_LDFLAGS': [
+            '-s'
+          ],
+          'WARNING_CFLAGS': [
+            '-Wall',
+            '-Wendif-labels',
+            '-W',
+            '-Wno-unused-parameter',
+          ],
+        },
+        'defines':[ '__IOS__' ],
+        'conditions': [
+          ['target_arch=="x64"', {
+            'xcode_settings': {'ARCHS': ['x86_64']},
+          }],
+          [ 'target_arch=="arm64"', {
+            'xcode_settings': {
+              'OTHER_CFLAGS': [
+                '-fembed-bitcode'
+              ],
+              'OTHER_CPLUSPLUSFLAGS': [
+                '-fembed-bitcode'
+              ],
+            }
+          }],
+          [ 'target_arch=="arm64"', {
+            'xcode_settings': {'ARCHS': ['arm64']},
+          }],
+          [ 'target_arch=="x64"', {
+            'xcode_settings': { 'SDKROOT': 'appletvsimulator' },
+          }, {
+            'xcode_settings': { 'SDKROOT': 'appletvos', 'ENABLE_BITCODE': 'YES'},
           }]
         ],
       }],

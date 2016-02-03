@@ -192,17 +192,18 @@
         [ 'OS=="android"', {
           'defines':['__ANDROID__']
         }],
-        [ 'OS=="ios"', {
+        [ 'OS=="ios" or OS=="tvos"', {
           'defines':['__IOS__']
         }],
         ['node_win_onecore==1', {
           'defines': [ 'WINONECORE=1',
                        '_WIN32_WINNT=0x0603', ]
         }],
-        [ 'OS=="ios" and (target_arch=="ia32" or target_arch=="x64")', {
+        # TODO might add __TVOS_SIMULATOR__ and __TVOS__
+        [ '(OS=="ios" or OS=="tvos") and (target_arch=="ia32" or target_arch=="x64")', {
           'defines':['__IOS_SIMULATOR__'],
         }],
-        [ 'OS=="mac" or OS=="ios"', {
+        [ 'OS=="mac" or OS=="ios" or OS=="tvos"', {
           'sources': [
             'src/unix/darwin.c',
             'src/unix/fsevents.c',

@@ -136,7 +136,7 @@
           'include_dirs': [ 'config/linux' ],
           'sources': [ 'config/linux/ares_config.h' ]
         }],
-        [ 'OS=="mac" or OS=="ios"', {
+        [ 'OS=="mac" or OS=="ios" or OS=="tvos"', {
           'include_dirs': [ 'config/darwin' ],
           'sources': [ 'config/darwin/ares_config.h' ]
         }],

@@ -5,7 +5,7 @@
 {
   'variables': {
     'conditions': [
-      ['OS=="ios"', {
+      ['OS=="ios" or OS=="tvos"', {
         'exclude_nss_root_certs%': 0,
         'exclude_nss_libpkix%': 0,
       }, {
@@ -259,7 +259,7 @@
             ],
           },
           'conditions': [
-            ['OS=="mac" or OS=="ios"', {
+            ['OS=="mac" or OS=="ios" or OS=="tvos"', {
               'defines': [
                 'XP_UNIX',
                 'DARWIN',
@@ -300,7 +300,7 @@
                 ],
               },
             }],
-            ['OS=="ios"', {
+            ['OS=="ios" or OS=="tvos"', {
               'defines!': [
                 'HAVE_CRT_EXTERNS_H',
               ],
@@ -1195,7 +1195,7 @@
                 'nss/lib/freebl/poly1305/poly1305-donna-x64-sse2-incremental-source.c',
                 ],
             }],
-            ['OS=="mac" or OS=="ios"', {
+            ['OS=="mac" or OS=="ios" or OS=="tvos"', {
               'defines': [
                 'XP_UNIX',
                 'DARWIN',

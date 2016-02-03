@@ -343,9 +343,9 @@
             'xcode_settings': {'ARCHS': ['arm64']},
           }],
           [ 'target_arch=="x64"', {
-            'xcode_settings': { 'SDKROOT': 'appletvsimulator', 'PLATFORM': "AppleTVOS" },
+            'xcode_settings': { 'SDKROOT': 'appletvsimulator' },
           }, {
-            'xcode_settings': { 'SDKROOT': 'appletvos', 'PLATFORM': "AppleTVOS", 'ENABLE_BITCODE': 'YES'},
+            'xcode_settings': { 'SDKROOT': 'appletvos', 'ENABLE_BITCODE': 'YES'},
           }]
         ],
       }],

@@ -8,7 +8,7 @@
     {
       'target_name': 'mozjs',
       'type': '<(library)',
-    
+
       'include_dirs': [
         'incs/',
         'incs/icu/source/common',
@@ -16,8 +16,8 @@
         'src',
         '<(SHARED_INTERMEDIATE_DIR)',
       ],
-      
-      'sources': [ 
+
+      'sources': [
        'incs/mozilla/Char16.h',
        'incs/mozilla/double-conversion/bignum.cc',
        'incs/mozilla/double-conversion/bignum-dtoa.cc',
@@ -27,25 +27,25 @@
        'incs/mozilla/double-conversion/fast-dtoa.cc',
        'incs/mozilla/double-conversion/fixed-dtoa.cc',
        'incs/mozilla/double-conversion/strtod.cc',
-       'incs/mozilla/Poison.cpp', 
-       'incs/mozilla/SHA1.cpp', 
+       'incs/mozilla/Poison.cpp',
+       'incs/mozilla/SHA1.cpp',
        'incs/mozilla/Compression__.cpp',
        'incs/mozilla/FloatingPoint.cpp',
        'incs/mozilla/HashFunctions.cpp',
        'incs/mozilla/TaggedAnonymousMemory.cpp',
-       
+
        'src/frontend/Parser.cpp',
        'src/jsarray.cpp',
        'src/jsatom.cpp',
        'src/jsmath.cpp',
        'src/jsutil.cpp',
-  
+
        'src/asmjs/AsmJSFrameIterator.cpp',
        'src/asmjs/AsmJSLink.cpp',
        'src/asmjs/AsmJSModule.cpp',
        'src/asmjs/AsmJSSignalHandlers.cpp',
        'src/asmjs/AsmJSValidate.cpp',
-       
+
        'src/builtin/Eval.cpp',
        'src/builtin/Intl.cpp',
        'src/builtin/MapObject.cpp',
@@ -79,7 +79,7 @@
        'src/gc/Tracer.cpp',
        'src/gc/Verifier.cpp',
        'src/gc/Zone.cpp',
-       
+
        'src/irregexp/NativeRegExpMacroAssembler.cpp',
        'src/irregexp/RegExpAST.cpp',
        'src/irregexp/RegExpEngine.cpp',
@@ -146,7 +146,7 @@
        'src/jit/UnreachableCodeElimination.cpp',
        'src/jit/ValueNumbering.cpp',
        'src/jit/VMFunctions.cpp',
-       
+
        'src/jsalloc.cpp',
        'src/jsapi.cpp',
        'src/jsbool.cpp',
@@ -222,7 +222,7 @@
        'src/vm/ArrayBufferObject.cpp',
        'src/vm/WeakMapPtr.cpp',
       ],
-      
+
       'defines': [
         'DISABLE_SHARED_JS=1',
         'EXPORT_JS_API=1',
@@ -239,13 +239,13 @@
         'Release': {
           'defines': ['NDEBUG'],
         },
-      },  
+      },
       'dependencies': [ '../zlib/zlib.gyp:zlib' ],
-      'conditions': 
-      [ 
+      'conditions':
+      [
         ['uclibc_defined == 1', {
           'defines':['POSIX_UCLIBC_DEFINED'],
-        }], 
+        }],
         ['target_arch in "arm armv7 armv7s"', {
           'defines': [ 'WTF_CPU_ARM_TRADITIONAL', 'JS_NUNBOX32', 'JS_CPU_ARM=1' ],
         }],
@@ -298,7 +298,7 @@
         ['target_arch=="x64"', {
           'defines':[ 'JS_PUNBOX64', 'JS_CPU_X64=1' ],
           'conditions':[
-          ['OS=="ios" or node_win_onecore==1', {
+          ['OS=="ios" or OS=="tvos" or node_win_onecore==1', {
             'sources':[
               'src/jit/none/Trampoline-none.cpp'   # ION DISABLED
             ],
@@ -333,7 +333,7 @@
         ['target_arch=="ia32"', {
             'defines':[ 'JS_NUNBOX32', 'JS_CPU_X86=1' ],
             'conditions':[
-              ['OS=="ios" or node_win_onecore==1', {
+              ['OS=="ios" or OS=="tvos" or node_win_onecore==1', {
                 'sources':[
                   'src/jit/none/Trampoline-none.cpp'   # ION DISABLED
                 ],
@@ -368,10 +368,10 @@
         }],
         ['OS=="mac"', {
           'xcode_settings': {
-            'MACOSX_DEPLOYMENT_TARGET': '10.7', # -mmacosx-version-min=10.7 
+            'MACOSX_DEPLOYMENT_TARGET': '10.7', # -mmacosx-version-min=10.7
           }
         }],
-        ['OS=="mac" or OS=="ios"', {
+        ['OS=="mac" or OS=="ios" or OS=="tvos"', {
           'sources': [
             'src/perf/pm_stub.cpp',
           ],
@@ -381,7 +381,7 @@
             'JS_HAVE_MACHINE_ENDIAN_H=1',
           ],
           'xcode_settings': {
-            'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11', '-stdlib=libstdc++', 
+            'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11', '-stdlib=libstdc++',
               '-Wno-mismatched-tags', '-Wno-missing-field-initializers',
               '-Wno-unused-private-field', '-Wno-invalid-offsetof', '-Wno-ignored-qualifiers'],
             'OTHER_CFLAGS' : ['-std=gnu99'],
@@ -401,7 +401,7 @@
           'EMBED_BITCODE': 'YES',
           'IPHONEOS_DEPLOYMENT_TARGET': '6.0',
           'GCC_GENERATE_DEBUGGING_SYMBOLS': 'NO',
-          
+
           'USE_HEADERMAP': 'NO',
           'OTHER_CFLAGS': [
             '-fno-strict-aliasing',
@@ -452,6 +452,65 @@
             'xcode_settings': { 'SDKROOT': 'iphonesimulator' },
           }, {
             'xcode_settings': { 'SDKROOT': 'iphoneos', 'ENABLE_BITCODE': 'YES'},
+          }]
+        ],
+      }],
+      ['OS=="tvos"', {
+        'xcode_settings': {
+          'ALWAYS_SEARCH_USER_PATHS': 'NO',
+          'GCC_CW_ASM_SYNTAX': 'NO',                # No -fasm-blocks
+          'GCC_DYNAMIC_NO_PIC': 'NO',               # No -mdynamic-no-pic
+                                                    # (Equivalent to -fPIC)
+          'GCC_ENABLE_CPP_EXCEPTIONS': 'NO',        # -fno-exceptions
+          'GCC_ENABLE_CPP_RTTI': 'NO',              # -fno-rtti
+          'GCC_ENABLE_PASCAL_STRINGS': 'NO',        # No -mpascal-strings
+          'GCC_THREADSAFE_STATICS': 'NO',           # -fno-threadsafe-statics
+          'PREBINDING': 'NO',                       # No -Wl,-prebind
+          'EMBED_BITCODE': 'YES',
+          'IPHONEOS_DEPLOYMENT_TARGET': '6.0',
+          'GCC_GENERATE_DEBUGGING_SYMBOLS': 'NO',
+
+          'USE_HEADERMAP': 'NO',
+          'OTHER_CFLAGS': [
+            '-fno-strict-aliasing',
+            '-fno-standalone-debug'
+          ],
+          'OTHER_CPLUSPLUSFLAGS': [
+            '-fno-strict-aliasing',
+            '-fno-standalone-debug'
+          ],
+          'OTHER_LDFLAGS': [
+            '-s'
+          ],
+          'WARNING_CFLAGS': [
+            '-Wall',
+            '-Wendif-labels',
+            '-W',
+            '-Wno-unused-parameter',
+          ],
+        },
+        'defines':[ '__IOS__' ],
+        'conditions': [
+          ['target_arch=="x64"', {
+            'xcode_settings': {'ARCHS': ['x86_64']},
+          }],
+          [ 'target_arch=="arm64"', {
+            'xcode_settings': {
+              'OTHER_CFLAGS': [
+                '-fembed-bitcode'
+              ],
+              'OTHER_CPLUSPLUSFLAGS': [
+                '-fembed-bitcode'
+              ],
+            }
+          }],
+          [ 'target_arch=="arm64"', {
+            'xcode_settings': {'ARCHS': ['arm64']},
+          }],
+          [ 'target_arch=="x64"', {
+            'xcode_settings': { 'SDKROOT': 'appletvsimulator' },
+          }, {
+            'xcode_settings': { 'SDKROOT': 'appletvos', 'ENABLE_BITCODE': 'YES'},
           }]
         ],
       }],
@@ -507,7 +566,7 @@
            ],
         }],
         ['OS=="win"', {
-           'defines': [ 'XP_WIN', '_CRT_RAND_S', 'WTF_COMPILER_MSVC' ],  
+           'defines': [ 'XP_WIN', '_CRT_RAND_S', 'WTF_COMPILER_MSVC' ],
            'sources': [
              'src/perf/pm_stub.cpp',
              'src/jit/ExecutableAllocatorWin.cpp',
@@ -522,7 +581,7 @@
              }, {
                'defines':['_X86_']
            }]
-         ], 
+         ],
          'msvs_settings': {
             'VCLibrarianTool': {
               'AdditionalDependencies': [
@@ -535,7 +594,7 @@
            'cflags': [
              '-pthread'
            ],
-           'defines': [ 'XP_UNIX', 'MOZ_CHAR16_IS_NOT_WCHAR', 'JS_POSIX_NSPR' ], 
+           'defines': [ 'XP_UNIX', 'MOZ_CHAR16_IS_NOT_WCHAR', 'JS_POSIX_NSPR' ],
            'sources': [
              'src/jit/ExecutableAllocatorPosix.cpp',
              'src/vm/PosixNSPR.cpp',
@@ -547,17 +606,17 @@
            'outputs': [ #DO NOT CHANGE THE BELOW ORDER!!
              'src/builtin/Utilities.js',
              'src/builtin/TypedObject.js',
-             'src/builtin/Array.js', 
-             'src/builtin/Date.js', 
+             'src/builtin/Array.js',
+             'src/builtin/Date.js',
              'src/builtin/Object.js',
              'src/builtin/String.js',
-             'src/builtin/Error.js', 
-             'src/builtin/Intl.js', 
-             'src/builtin/IntlData.js', 
+             'src/builtin/Error.js',
+             'src/builtin/Intl.js',
+             'src/builtin/IntlData.js',
              'src/builtin/Iterator.js',
              'src/builtin/Map.js',
-             'src/builtin/Number.js', 
-             'src/builtin/ParallelUtilities.js', 
+             'src/builtin/Number.js',
+             'src/builtin/ParallelUtilities.js',
              'src/builtin/Set.js',
              'src/builtin/WeakSet.js',
            ],
@@ -574,6 +633,6 @@
            ],
          }]
        }]
-     ]  
+     ]
   }]
 }

@@ -143,7 +143,7 @@
       'src/node_constants.cc',
       'src/node_extensions.cc',
       'src/node_javascript.cc',
-      
+
       'src/public/jx_result.cc',
       'src/public/jx.cc',
 
@@ -245,9 +245,9 @@
             'variables': {
               'node_engine_include_dir%': 'deps/chakrashim/include'
             },
-            'defines': [ 'JS_ENGINE_CHAKRA=1', 'JS_ENGINE_V8=1', 
+            'defines': [ 'JS_ENGINE_CHAKRA=1', 'JS_ENGINE_V8=1',
                          'BUILDING_CHAKRASHIM=1', 'USE_EDGEMODE_JSRT=1' ],
-            'dependencies': [ 'deps/chakrashim/chakrashim.gyp:chakrashim', 
+            'dependencies': [ 'deps/chakrashim/chakrashim.gyp:chakrashim',
                               'deps/node-uwp/binding.gyp:uwp'],
              'conditions': [
                [ 'node_win_onecore==1', {
@@ -356,7 +356,7 @@
               "JS_HAVE_MACHINE_ENDIAN_H",
             ],
           }],
-          ['OS=="ios" or OS=="mac"',
+          ['OS=="ios" or OS=="tvos" or OS=="mac"',
           {
             'defines': [
               'JS_HAVE_MACHINE_ENDIAN_H=1',
@@ -389,8 +389,23 @@
                   'src/platform/ios_device', #ios device SDK doesn not have crt_externs.h
                 ],
               }],
-              ['OS=="ios" and (target_arch=="x64" or target_arch=="ia32")', {
-                'xcode_settings': { 'SDKROOT': 'iphonesimulator' },
+              ['OS=="tvos" and target_arch=="x64"', {
+                'xcode_settings': { 'SDKROOT': 'appletvsimulator' },
+              }],
+              ['OS=="tvos"', {
+                'xcode_settings': {
+                  'TVOS_DEPLOYMENT_TARGET': '9.0',
+                },
+                'defines': ['__IOS__']
+              }],
+              ['OS=="tvos" and target_arch!="x64" and target_arch!="ia32"', {
+                'xcode_settings': { 'SDKROOT': 'appletvos' },
+                'include_dirs': [
+                  'src/platform/ios_device', #ios device SDK doesn not have crt_externs.h
+                ],
+              }],
+              ['OS=="tvos" and target_arch=="x64"', {
+                'xcode_settings': { 'SDKROOT': 'appletvsimulator' },
               }],
             ]
           }],
@@ -459,7 +474,7 @@
         ]
       }],
       ['node_no_sqlite==0',
-      {        
+      {
         'defines': [ 'JXCORE_EMBEDS_SQLITE' ],
         'sources': [
           'deps/sqlite/sqlite3.h',
@@ -496,7 +511,7 @@
           'src/res/node.rc',
         ],
         'defines': [
-          'FD_SETSIZE=1024', # we need to use node 's preferred "win32" 
+          'FD_SETSIZE=1024', # we need to use node 's preferred "win32"
                              # rather than gyp's preferred "win"
           'PLATFORM="win32"',
           '_UNICODE=1',
@@ -515,12 +530,12 @@
         '!defines': [
           'PLATFORM="darwin"'
         ],
-        'defines': [# we need to use node 's preferred "darwin" 
+        'defines': [# we need to use node 's preferred "darwin"
                     # rather than gyp's preferred "mac"
           'PLATFORM="darwin"',
         ],
       }],
-      ['OS=="ios" or OS=="android"',
+      ['OS=="tvos" or OS=="ios" or OS=="android"', # count tvos as mobile, for now
       {
         'defines': ['__MOBILE_OS__']
       }],
