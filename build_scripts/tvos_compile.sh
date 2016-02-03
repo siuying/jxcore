@@ -57,8 +57,8 @@ fi
 
 
 MAKE_INSTALL() {
-  TARGET_DIR="out_$1_ios"
-  PREFIX_DIR="out_ios/$1"
+  TARGET_DIR="out_$1_tvos"
+  PREFIX_DIR="out_tvos/$1"
   mv $TARGET_DIR out
   ./configure --prefix=$PREFIX_DIR --static-library --dest-os=tvos --dest-cpu=$1 --engine-mozilla --compress-internals $CONF_EXTRAS
   ERROR_ABORT_MOVE "mv out $TARGET_DIR" $1
