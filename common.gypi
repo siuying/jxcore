@@ -11,13 +11,13 @@
     'clang%': 1,
     'python%': 'python',
     'uclibc_defined%': 0,
-    
+
     # engines
     'node_engine_chakra%': 0,
     'node_engine_mozilla%': 0,
     'node_engine_v8%': 0,
     'v8_postmortem_support': 'false',
-    
+
     'node_win_onecore%' : 0,
 
     # Enable disassembler for `--print-code` v8 options
@@ -27,7 +27,7 @@
     'conditions': [
       ['uclibc_defined == 1', {
         'defines':['POSIX_UCLIBC_DEFINED'],
-      }], 
+      }],
       ['OS == "win"', {
         'os_posix%': 0,
       }, {
@@ -217,7 +217,7 @@
         'ldflags': [ '-fPIC' ],
       }],
       [ 'OS in "linux freebsd openbsd solaris android"', {
-        'cflags': [ '-Wall', '-Wextra', '-Wno-unused-parameter', 
+        'cflags': [ '-Wall', '-Wextra', '-Wno-unused-parameter',
                     '-Wno-inconsistent-missing-override' ],
         'cflags_cc': [ '-fno-rtti', '-fno-exceptions' ],
         'ldflags': [ '-rdynamic' ],
@@ -290,6 +290,65 @@
           }],
         ],
       }],
+      ['OS=="tvos"', {
+        'xcode_settings': {
+          'ALWAYS_SEARCH_USER_PATHS': 'NO',
+          'GCC_CW_ASM_SYNTAX': 'NO',                # No -fasm-blocks
+          'GCC_DYNAMIC_NO_PIC': 'NO',               # No -mdynamic-no-pic
+                                                    # (Equivalent to -fPIC)
+          'GCC_ENABLE_CPP_EXCEPTIONS': 'NO',        # -fno-exceptions
+          'GCC_ENABLE_CPP_RTTI': 'NO',              # -fno-rtti
+          'GCC_ENABLE_PASCAL_STRINGS': 'NO',        # No -mpascal-strings
+          'GCC_THREADSAFE_STATICS': 'NO',           # -fno-threadsafe-statics
+          'PREBINDING': 'NO',                       # No -Wl,-prebind
+          'EMBED_BITCODE': 'YES',
+          'IPHONEOS_DEPLOYMENT_TARGET': '6.0',
+          'GCC_GENERATE_DEBUGGING_SYMBOLS': 'NO',
+
+          'USE_HEADERMAP': 'NO',
+          'OTHER_CFLAGS': [
+            '-fno-strict-aliasing',
+            '-fno-standalone-debug'
+          ],
+          'OTHER_CPLUSPLUSFLAGS': [
+            '-fno-strict-aliasing',
+            '-fno-standalone-debug'
+          ],
+          'OTHER_LDFLAGS': [
+            '-s'
+          ],
+          'WARNING_CFLAGS': [
+            '-Wall',
+            '-Wendif-labels',
+            '-W',
+            '-Wno-unused-parameter',
+          ],
+        },
+        'defines':[ '__IOS__' ],
+        'conditions': [
+          ['target_arch=="x64"', {
+            'xcode_settings': {'ARCHS': ['x86_64']},
+          }],
+          [ 'target_arch=="arm64"', {
+            'xcode_settings': {
+              'OTHER_CFLAGS': [
+                '-fembed-bitcode'
+              ],
+              'OTHER_CPLUSPLUSFLAGS': [
+                '-fembed-bitcode'
+              ],
+            }
+          }],
+          [ 'target_arch=="arm64"', {
+            'xcode_settings': {'ARCHS': ['arm64']},
+          }],
+          [ 'target_arch=="x64"', {
+            'xcode_settings': { 'SDKROOT': 'appletvsimulator', 'PLATFORM': "AppleTVOS" },
+          }, {
+            'xcode_settings': { 'SDKROOT': 'appletvos', 'PLATFORM': "AppleTVOS", 'ENABLE_BITCODE': 'YES'},
+          }]
+        ],
+      }],
       ['OS=="ios"', {
         'xcode_settings': {
           'ALWAYS_SEARCH_USER_PATHS': 'NO',
@@ -304,7 +363,7 @@
           'EMBED_BITCODE': 'YES',
           'IPHONEOS_DEPLOYMENT_TARGET': '6.0',
           'GCC_GENERATE_DEBUGGING_SYMBOLS': 'NO',
-          
+
           'USE_HEADERMAP': 'NO',
           'OTHER_CFLAGS': [
             '-fno-strict-aliasing',

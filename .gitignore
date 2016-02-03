@@ -44,6 +44,7 @@ out_mozjs/
 out_v8/
 out_ios/
 out_android/
+out_*tvos
 
 .pbxproj/
 *.xcodeproj/
