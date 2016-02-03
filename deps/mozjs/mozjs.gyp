@@ -467,7 +467,7 @@
           'GCC_THREADSAFE_STATICS': 'NO',           # -fno-threadsafe-statics
           'PREBINDING': 'NO',                       # No -Wl,-prebind
           'EMBED_BITCODE': 'YES',
-          'IPHONEOS_DEPLOYMENT_TARGET': '6.0',
+          'TVOS_DEPLOYMENT_TARGET': '9.0',
           'GCC_GENERATE_DEBUGGING_SYMBOLS': 'NO',
 
           'USE_HEADERMAP': 'NO',
@@ -514,7 +514,7 @@
           }]
         ],
       }],
-        [ 'OS!="ios" and OS!="android"', {
+        [ 'OS!="tvos" and OS!="ios" and OS!="android"', {
           'dependencies': [ './jskwgen.gyp:jskwgen' ],
         }],
         ['OS in "linux"', {
